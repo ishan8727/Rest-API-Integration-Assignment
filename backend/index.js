@@ -2,10 +2,12 @@ const express = require('express');
 const axios = require('axios');
 const mongoose = require('mongoose');
 const Weather = require('./model/weather');
+const cors = require('cors');
 const filterWeather = require('./helper/filterHelper');
 
 const env = require('dotenv');
 env.config();
+
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
 
@@ -19,6 +21,7 @@ mongoose.connect(MONGO_URL)
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get('/', async (req,res)=>{
     console.log('Hitting home base URL!');
@@ -64,8 +67,6 @@ app.get('/', async (req,res)=>{
     }
 })
 
-
-// Start server only after MongoDB connection is ready
 mongoose.connection.once('connected', () => {
     app.listen(PORT || 3333, () => {
         console.log(`Server is running on PORT: ${PORT || 3333}!`);
