@@ -5,6 +5,8 @@ import axios from 'axios';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import './App.css';
+import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+ModuleRegistry.registerModules([ AllCommunityModule ]);
 
 function App() {
   const gridRef = useRef();
@@ -178,26 +180,9 @@ function App() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="px-5 py-2.5 text-white font-semibold bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg hover:opacity-90 disabled:opacity-50 mr-2"
+            className="px-5 py-2.5 text-white font-semibold bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg hover:opacity-90 disabled:opacity-50"
           >
             {loading ? 'Loading...' : 'Submit'}
-          </button>
-          
-          <button
-            onClick={() => {
-              const testData = [
-                { time: "2025-07-31 12:00:00", temp_c: 25, condition: "Sunny", chance_of_rain: 10, will_it_rain: "No" },
-                { time: "2025-07-31 13:00:00", temp_c: 27, condition: "Partly Cloudy", chance_of_rain: 20, will_it_rain: "No" },
-                { time: "2025-07-31 14:00:00", temp_c: 29, condition: "Clear", chance_of_rain: 5, will_it_rain: "No" },
-                { time: "2025-07-31 15:00:00", temp_c: 30, condition: "Hot", chance_of_rain: 0, will_it_rain: "No" }
-              ];
-              console.log("Setting test data:", testData);
-              setRowData(testData);
-              setError(null);
-            }}
-            className="px-5 py-2.5 text-white font-semibold bg-gradient-to-r from-green-600 to-teal-500 rounded-lg hover:opacity-90"
-          >
-            Test Grid
           </button>
         </div>
       </div>
