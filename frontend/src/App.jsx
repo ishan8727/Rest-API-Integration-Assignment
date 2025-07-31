@@ -5,8 +5,6 @@ import axios from 'axios';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import './App.css';
-import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
-ModuleRegistry.registerModules([ AllCommunityModule ]);
 
 function App() {
   const gridRef = useRef();
@@ -205,6 +203,57 @@ function App() {
             </div>
           )}
           
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Weather Data ({rowData.length} records)</h2>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  // Create CSV content
+                  const headers = colDefs.map(col => col.headerName).join(',');
+                  const rows = rowData.map(row => 
+                    colDefs.map(col => row[col.field]).join(',')
+                  ).join('\n');
+                  const csvContent = `${headers}\n${rows}`;
+                  
+                  // Create and trigger download
+                  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                  const link = document.createElement('a');
+                  const url = URL.createObjectURL(blob);
+                  link.setAttribute('href', url);
+                  link.setAttribute('download', `weather_data_${new Date().toISOString().split('T')[0]}.csv`);
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="px-4 py-2 text-sm text-white font-semibold bg-green-600 rounded hover:bg-green-700"
+              >
+                Download CSV
+              </button>
+              <button
+                onClick={() => {
+                  // Create Excel-like TSV content
+                  const headers = colDefs.map(col => col.headerName).join('\t');
+                  const rows = rowData.map(row => 
+                    colDefs.map(col => row[col.field]).join('\t')
+                  ).join('\n');
+                  const tsvContent = `${headers}\n${rows}`;
+                  
+                  // Create and trigger download
+                  const blob = new Blob([tsvContent], { type: 'text/tab-separated-values;charset=utf-8;' });
+                  const link = document.createElement('a');
+                  const url = URL.createObjectURL(blob);
+                  link.setAttribute('href', url);
+                  link.setAttribute('download', `weather_data_${new Date().toISOString().split('T')[0]}.xls`);
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="px-4 py-2 text-sm text-white font-semibold bg-blue-600 rounded hover:bg-blue-700"
+              >
+                Download Excel
+              </button>
+            </div>
+          </div>
           <div 
             className="ag-theme-quartz" 
             style={{ 
